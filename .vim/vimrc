@@ -1,0 +1,451 @@
+" 定义快捷键的前缀，即<leader>
+let g:mapleader=" "
+
+"开启语法高亮
+syntax enable
+"打开语法高亮  
+syntax on
+
+"打开文件类型检测功能  
+filetype on
+"不同文件类型采用不同缩进  
+filetype indent on
+"根据侦测到的不同类型加载对应的插件
+filetype plugin on
+" 自适应不同语言的智能缩进
+filetype indent on
+
+"允许使用鼠标
+set mouse=a
+" 关闭兼容模式
+set nocompatible
+" vim 自身命令行模式智能补全
+set wildmenu
+"如果缓冲区中有未保存的修改，则标记为隐藏
+set hidden
+
+"使用配色方案 
+set background=dark
+"set background=light
+colorscheme desert  
+"colorscheme ron
+" 禁止光标闪烁
+set gcr=a:block-blinkon0
+" 禁止显示滚动条
+set guioptions-=l
+set guioptions-=L
+set guioptions-=r
+set guioptions-=R
+" 禁止显示菜单和工具条
+set guioptions-=m
+set guioptions-=T
+" 总是显示状态栏
+set laststatus=2
+" 设置状态行显示常用信息
+"set statusline=%F%m%r%h%w/[FORMAT=%{&ff}]/[TYPE=%Y]/[ASCII=/%03.3b]/[HEX=/%02.2B]/[POS=%04l,%04v][%p%%]/[LEN=%L]
+set statusline=%f%m%r%h%w[%p%%]
+set laststatus=2
+
+" 行太长则多行显示
+set wrap
+" 上下保留10行
+set scrolloff=10
+" 显示指令
+set showcmd
+" 显示光标当前位置
+set ruler
+" 开启行号显示
+set number
+" 关闭相对行号
+set norelativenumber
+"set relativenumber
+"高亮显示当前行列
+"set cursorline
+"hi CursorLine cterm=NONE ctermbg=black ctermfg=green guibg=NONE guifg=NONE
+"set cursorcolumn
+"高亮显示匹配的括号  
+set showmatch  
+" 高亮显示搜索结果
+set hlsearch
+exec "nohlsearch"
+"开启实时搜索功能
+set incsearch
+" 搜索时大小写不敏感
+set ignorecase
+" 智能忽略大小写
+set smartcase
+
+" 拼写检查
+"set spell spelllang=en_us
+" 如果文件被其他程序改变，发出提示
+set autoread
+
+"设置缩进
+set smartindent shiftwidth=4
+" 将制表符扩展为空格
+set expandtab
+" 设置编辑时制表符占用空格数
+set tabstop=4
+" 设置格式化时制表符占用空格数
+set shiftwidth=4
+" 让 vim 把连续数量的空格视为一个制表符
+set softtabstop=4
+"使用delete时也删四个空格
+set sts=4
+
+"与windows共享剪贴板
+set clipboard+=unnamed
+"粘贴时保持格式 
+set paste
+"自动对齐
+set autoindent
+"粘贴时关闭自动缩进
+set pastetoggle=<F8>
+
+
+"避免不能使用backspace
+set backspace=indent,eol,start
+
+" 基于缩进或语法进行代码折叠
+"set foldmethod=indent
+set foldmethod=syntax
+" 启动 vim 时关闭折叠代码
+set nofoldenable
+
+"让配置变更立即生效
+"autocmd BufWritePost $MYVIMRC source $MYVIMRC
+map <F5> :source $MYVIMRC<CR>
+
+" 启用:Man命令查看各类man信息
+source $VIMRUNTIME/ftplugin/man.vim
+" 定义:Man命令查看各类man信息的快捷键
+nmap <leader>hm :Man 3 <cword><CR>
+
+" 定义快捷键到行首和行尾
+map <C-a> ^
+map <C-e> $
+" 设置快捷键将选中文本块复制至系统剪贴板
+vnoremap <leader>y "+y
+" 设置快捷键将系统剪贴板内容粘贴至 vim
+nmap <leader>p "+p
+" 设置快捷键实现一键编译及运行
+"nmap <leader>m :wa<CR> :cd build/<CR> :!rm -rf main<CR> :!cmake CMakeLists.txt<CR>:make<CR><CR> :cw<CR> :cd ..<CR>
+"nmap <leader>g :wa<CR>:cd build/<CR>:!rm -rf main<CR>:!cmake CMakeLists.txt<CR>:make<CR><CR>:cw<CR>:cd ..<CR>:!build/main<CR>
+"spell check, mod by z= 
+map <leader>sc :set spell!
+
+" 窗口快捷键
+map <up> :res +5<CR>
+map <down> :res -5<CR>
+map <left> :vertical resize-5<CR>
+map <right> :vertical resize+5<CR>
+
+map <leader>sl :set splitright<CR>:vsplit<CR>
+map <leader>sh :set nosplitright<CR>:vsplit<CR>
+map <leader>sk :set nosplitbelow<CR>:split<CR>
+map <leader>sj :set splitbelow<CR>:split<CR>
+
+map <leader>sv <C-w>t<C-w>H
+map <leader>sh <C-w>t<C-w>K
+
+"open file
+"gf
+
+"filetype off
+call plug#begin('~/.vim/plugged')
+Plug 'connorholyday/vim-snazzy' "snazzy主题
+Plug 'altercation/vim-colors-solarized' "solarized主题
+Plug 'rafi/awesome-vim-colorschemes' "vim主题合集
+Plug 'vim-airline/vim-airline' "状态栏
+Plug 'fholgado/minibufexpl.vim' "文件buf
+Plug 'vim-scripts/taglist.vim',{ 'on': 'TlistToggle' } "标签可视化
+Plug 'majutsushi/tagbar',{ 'on': 'TagbarToggle' } "标签可视化
+Plug 'scrooloose/nerdtree',{ 'on': 'NERDTreeToggle' } "目录树
+Plug 'vim-scripts/a.vim'    "快速切换.c(.cpp)与.h
+Plug 'yegappan/grep' "内容查找
+Plug 'mileszs/ack.vim' "内容查找
+Plug 'dyng/ctrlsf.vim' "内容查找 依赖ack,ubuntu需要安装ack-grep
+Plug 'Yggdroot/LeaderF', { 'do': './install.sh' } "模糊查找
+"Plug 'vim-scripts/indexer.tar.gz' "自动更新标签
+"Plug 'vim-scripts/DfrankUtil'    "自动更新标签依赖
+"Plug 'vim-scripts/vimprj'        "自动更新标签依赖
+Plug 'ludovicchabant/vim-gutentags' "自动更新标签
+Plug 'skywind3000/gutentags_plus' "自动更新标签
+"Plug 'scrooloose/nerdcommenter' "快速开关注释
+"Plug 'SirVer/ultisnips' "模板补全
+"Plug 'honza/vim-snippets' "一些公用模板
+Plug 'Valloric/YouCompleteMe' "语法补全
+Plug 'rdnetto/YCM-Generator'	" .ycm_extra_conf.py与.color_coded生成插件
+Plug 'Chiel92/vim-autoformat' "代码格式化
+call plug#end()
+"filetype plugin indent on
+
+set background=dark
+"colorscheme snazzy
+"let g:SnazzyTransparent = 1 "透明背景
+"colorscheme gruvbox
+colorscheme solarized
+"let g:solarized_termcolors=256
+
+"" airline
+"let g:airline#extensions#tabline#enabled = 1
+"" next buf
+"nmap <leader>bn :bn<CR>
+"" previous buf
+"nmap <leader>bp :bp<CR>
+
+" 显示/隐藏 MiniBufExplorer 窗口
+ nnoremap <F4> :MBEToggle<cr>
+" buffer 切换快捷键
+"map <C-Tab> :MBEbn<cr>
+"map <C-S-Tab> :MBEbp<cr>
+
+
+"Tlist ctags  配置
+let Tlist_Auto_Open=1
+let Tlist_Show_One_File=1
+let Tlist_Exit_OnlyWindow=1
+let Tlist_Ctags_Cmd="/usr/bin/ctags"
+nnoremap <F2> :TlistToggle<CR> 
+
+"tagbar 配置
+"" 设置 tagbar 子窗口的位置出现在主编辑区的左边 
+"let tagbar_left=1 
+"" 设置显示／隐藏标签列表子窗口的快捷
+"nnoremap <F2> :TagbarToggle<CR> 
+"" 设置标签子窗口的宽度 
+"let tagbar_width=32
+"" tagbar 子窗口中不显示冗余帮助信息 
+"let g:tagbar_compact=1
+"" 设置 ctags 对哪些代码标识符生成标签
+"let g:tagbar_type_cpp = {
+"    \ 'kinds' : [
+"         \ 'c:classes:0:1',
+"         \ 'd:macros:0:1',
+"         \ 'e:enumerators:0:0', 
+"         \ 'f:functions:0:1',
+"         \ 'g:enumeration:0:1',
+"         \ 'l:local:0:1',
+"         \ 'm:members:0:1',
+"         \ 'n:namespaces:0:1',
+"         \ 'p:functions_prototypes:0:1',
+"         \ 's:structs:0:1',
+"         \ 't:typedefs:0:1',
+"         \ 'u:unions:0:1',
+"         \ 'v:global:0:1',
+"         \ 'x:external:0:1'
+"     \ ],
+"     \ 'sro'        : '::',
+"     \ 'kind2scope' : {
+"         \ 'g' : 'enum',
+"         \ 'n' : 'namespace',
+"         \ 'c' : 'class',
+"         \ 's' : 'struct',
+"         \ 'u' : 'union'
+"     \ },
+"     \ 'scope2kind' : {
+"         \ 'enum'      : 'g',
+"         \ 'namespace' : 'n',
+"         \ 'class'     : 'c',
+"         \ 'struct'    : 's',
+"         \ 'union'     : 'u'
+"     \ }
+"\ }
+
+"文件切换
+nnoremap <leader>a :A<cr>
+nnoremap <leader>as :AS<cr>
+nnoremap <leader>av :AV<cr>
+nnoremap <leader>i :IH<cr>
+nnoremap <leader>is :IHS<cr>
+nnoremap <leader>iv :IHV<cr>
+
+" 设置插件 indexer 调用 ctags 的参数
+" 默认 --c++-kinds=+p+l，重新设置为 --c++-kinds=+p+l+x+c+d+e+f+g+m+n+s+t+u+v
+" 默认 --fields=+iaS 不满足 YCM 要求，需改为 --fields=+iaSl
+"let g:indexer_ctagsCommandLineOptions="--c++-kinds=+p+l+x+c+d+e+f+g+m+n+s+t+u+v --fields=+iaSl --extra=+q"
+"let g:indexer_ctagsCommandLineOptions="--c++-kinds=+p+l --fields=+iaSl"
+
+"" use gnu global
+""let $GTAGSLABEL = 'native-pygments'
+"let $GTAGSLABEL='native'
+""let $GTAGSCONF = '/usr/local/share/gtags/gtags.conf'
+"set cscopeprg='gtags-cscope' " 使用 gtags-cscope 代替 cscope
+"let GtagsCscope_Auto_Load = 1
+"let CtagsCscope_Auto_Map = 1
+"let GtagsCscope_Quiet = 1
+
+" 同时开启 ctags 和 gtags 支持：
+let g:gutentags_modules = []
+if executable('ctags')
+	let g:gutentags_modules += ['ctags']
+endif
+if executable('gtags-cscope') && executable('gtags')
+	let g:gutentags_modules += ['gtags_cscope']
+endif
+
+" 将自动生成的 ctags/gtags 文件全部放入 ~/.cache/tags 目录中，避免污染工程目录
+let g:gutentags_cache_dir = expand('~/.cache/tags')
+" gutentags 搜索工程目录的标志，碰到这些文件/目录名就停止向上一级目录递归
+let g:gutentags_project_root = ['.root', '.hg', '.project', '.svn', '.git']
+" 所生成的数据文件的名称
+let g:gutentags_ctags_tagfile = '.tags'
+let g:gutentags_define_advanced_commands = 1
+"" 配置 ctags 的参数，老的 Exuberant-ctags 不能有 --extra=+q，注意
+"let g:gutentags_ctags_extra_args = ['--fields=+niazS']
+"let g:gutentags_ctags_extra_args += ['--c++-kinds=+px']
+"let g:gutentags_ctags_extra_args += ['--c-kinds=+px']
+"" 如果使用 universal ctags 需要增加下面一行，老的 Exuberant-ctags 不能加下一行
+""let g:gutentags_ctags_extra_args += ['--output-format=e-ctags']
+
+" 禁用 gutentags 自动加载 gtags 数据库的行为
+let g:gutentags_auto_add_gtags_cscope = 0
+"搜索后将焦点切换到quickfix窗口（可选）。
+let g:gutentags_plus_switch = 1
+"| keymap | desc |
+"|--------|------|
+"| `<leader>gs` | Find symbol (reference) under cursor |
+"| `<leader>gg` | Find symbol definition under cursor |
+"| `<leader>gd` | Functions called by this function |
+"| `<leader>gc` | Functions calling this function |
+"| `<leader>gt` | Find text string under cursor |
+"| `<leader>ge` | Find egrep pattern under cursor |
+"| `<leader>gf` | Find file name under cursor |
+"| `<leader>gi` | Find files #including the file name under cursor |
+"| `<leader>ga` | Find places where current symbol is assigned |
+"| `<leader>gz` | Find current word in ctags database |
+
+let g:gutentags_plus_nomap = 1
+nmap <silent> <leader>gs <Plug>GscopeFindSymbol
+nmap <silent> <leader>gg <Plug>GscopeFindDefinition
+nmap <silent> <leader>gc <Plug>GscopeFindCallingFunc
+nmap <silent> <leader>gt <Plug>GscopeFindText
+nmap <silent> <leader>ge <Plug>GscopeFindEgrep
+nmap <silent> <leader>gf <Plug>GscopeFindFile
+nmap <silent> <leader>gi <Plug>GscopeFindInclude
+nmap <silent> <leader>gd <Plug>GscopeFindCalledFunc
+nmap <silent> <leader>ga <Plug>GscopeFindAssign
+nmap <silent> <leader>gz <Plug>GscopeFindCtag
+nmap <silent> <leader>gk :GscopeKill<cr>
+
+"noremap <silent> <leader>gs :GscopeFind s <C-R><C-W><cr>
+"noremap <silent> <leader>gg :GscopeFind g <C-R><C-W><cr>
+"noremap <silent> <leader>gc :GscopeFind c <C-R><C-W><cr>
+"noremap <silent> <leader>gt :GscopeFind t <C-R><C-W><cr>
+"noremap <silent> <leader>ge :GscopeFind e <C-R><C-W><cr>
+"noremap <silent> <leader>gf :GscopeFind f <C-R>=expand("<cfile>")<cr><cr>
+"noremap <silent> <leader>gi :GscopeFind i <C-R>=expand("<cfile>")<cr><cr>
+"noremap <silent> <leader>gd :GscopeFind d <C-R><C-W><cr>
+"noremap <silent> <leader>ga :GscopeFind a <C-R><C-W><cr>
+"noremap <silent> <leader>gz :GscopeFind z <C-R><C-W><cr>
+
+"ctrlsf
+noremap <leader>f :CtrlSF<Space>
+
+"Leaderf
+let g:Lf_ShortcutF = '<c-p>'
+let g:Lf_ShortcutB = '<c-n>'
+noremap <leader>mfm :LeaderfMru<cr>
+noremap <leader>mff :LeaderfFunction!<cr>
+noremap <leader>mfb :LeaderfBuffer<cr>
+noremap <leader>mft :LeaderfTag<cr>
+let g:Lf_StlSeparator = { 'left': '', 'right': '', 'font': '' }
+
+let g:Lf_RootMarkers = ['.project', '.root', '.svn', '.git']
+let g:Lf_WorkingDirectoryMode = 'Ac'
+let g:Lf_WindowHeight = 0.30
+let g:Lf_CacheDirectory = expand('~/.vim/cache')
+let g:Lf_ShowRelativePath = 0
+let g:Lf_HideHelp = 1
+let g:Lf_StlColorscheme = 'powerline'
+let g:Lf_PreviewResult = {'Function':0, 'BufTag':0}
+
+" 模板补全
+" UltiSnips 的 tab 键与 YCM 冲突，重新设定
+"let g:UltiSnipsUsePythonVersion = 2
+"let g:UltiSnipsExpandTrigger = "<leader><tab>"
+"let g:UltiSnipsJumpForwardTrigger = "<leader><tab>"
+"let g:UltiSnipsJumpBackwardTrigger = "<leader><s-tab>"
+""let g:UltiSnipsSnippetDirectories=["UltiSnips"]
+"" If you want :UltiSnipsEdit to split your window
+"let g:UltiSnipsEditSplit="vertical"
+""default
+""let g:UltiSnipsExpandTrigger               <tab>
+""let g:UltiSnipsListSnippets                <c-tab>
+""let g:UltiSnipsJumpForwardTrigger          <c-j>
+""let g:UltiSnipsJumpBackwardTrigger         <c-k>
+
+" YCM 补全
+" YCM 补全菜单配色
+"highlight Pmenu ctermfg=2 ctermbg=3 guifg=#005f87 guibg=#EEE8D5
+" 选中项
+"highlight PmenuSel ctermfg=2 ctermbg=3 guifg=#AFD700 guibg=#106900
+" 补全功能在注释中同样有效
+let g:ycm_complete_in_comments=1
+"找不到.py时的回退路径
+let g:ycm_global_ycm_extra_conf = "~/.vim/.ycm_extra_conf.py"
+" 允许 vim 加载 .ycm_extra_conf.py 文件 提示
+let g:ycm_confirm_extra_conf=1
+" 开启 YCM 标签补全引擎
+let g:ycm_collect_identifiers_from_tags_files=1
+" 引入 C++ 标准库 tags
+"set tags+=/home/zhangxuan/usr/include/c++/4.8/stdcpp.tags
+"set tags+=/home/zhangxuan/usr/include/sys.tags
+" 补全内容不以分割子窗口形式出现，只显示补全列表
+set completeopt-=preview
+" 从第2个键入字符就开始罗列匹配项
+let g:ycm_min_num_of_chars_for_completion=2
+" 禁止缓存匹配项，每次都重新生成匹配项
+let g:ycm_cache_omnifunc=0
+" 语法关键字补全
+let g:ycm_seed_identifiers_with_syntax=1
+" 不限制诊断显示数量
+let g:ycm_max_diagnostics_to_display=0
+" 屏蔽ycm诊断信息
+let g:ycm_show_diagnostics_ui = 0
+let g:ycm_server_log_level = 'info'
+
+"let g:ycm_key_invoke_completion = '<c-z>'
+let g:ycm_key_list_select_completion = ['<C-n>', '<Down>']
+let g:ycm_key_list_previous_completion = ['<C-p>', '<Up>']
+" YCM 集成 OmniCppComplete 补全引擎，设置其快捷键
+inoremap <leader>; <C-x><C-o>
+
+" 基于语义的代码导航
+nnoremap <leader>jc :YcmCompleter GoToDeclaration<CR>
+" 只能是 #include 或已打开的文件
+nnoremap <leader>jd :YcmCompleter GoToDefinition<CR>
+
+".ycm_extra_conf.py gen (./config_gen.py dir)
+nnoremap <leader>myy :YcmGenerateConfig<CR>
+nnoremap <leader>myc :CCGenerateConfig<CR>
+
+" 使用 NERDTree 插件查看工程文件。设置快捷键
+nnoremap <F3> :NERDTreeToggle<CR>
+" 设置NERDTree子窗口宽度
+let NERDTreeWinSize=32
+" 设置NERDTree子窗口位置
+let NERDTreeWinPos="right"
+" 显示隐藏文件
+let NERDTreeShowHidden=1
+" NERDTree 子窗口中不显示冗余帮助信息
+let NERDTreeMinimalUI=1
+" 删除文件时自动删除文件对应 buffer
+let NERDTreeAutoDeleteBuffer=1
+
+"for vim-autoformat
+let g:autoformat_verbosemode=1
+"autocmd BufWrite *.sql,*.c,*.py,*.java,*.js :Autoformat
+noremap <F7> :Autoformat<CR>
+
+"let g:autoformat_autoindent = 0
+"let g:autoformat_retab = 0
+"let g:autoformat_remove_trailing_spaces = 0
+"autocmd FileType vim,tex let b:autoformat_autoindent=0
+"gg=G :retab :RemoveTrailingSpaces
+
+let g:formatdef_clangformat = '"clang-format -style=webkit"'
+let g:formatters_c = ['clangformat']
+
+"let g:formatdef_astyle_c = '"astyle --mode=c --style=ansi -pcHs"'
+"let g:formatters_c = ['astyle_c']
