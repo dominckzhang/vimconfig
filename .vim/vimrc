@@ -119,7 +119,7 @@ map <F5> :source $MYVIMRC<CR>
 " 启用:Man命令查看各类man信息
 source $VIMRUNTIME/ftplugin/man.vim
 " 定义:Man命令查看各类man信息的快捷键
-nmap <leader>hm :Man 3 <cword><CR>
+nmap <leader>hm :set splitbelow<CR>:Man 3 <cword><CR>
 
 " 定义快捷键到行首和行尾
 map <C-a> ^
@@ -131,6 +131,7 @@ nmap <leader>p "+p
 " 设置快捷键实现一键编译及运行
 "nmap <leader>m :wa<CR> :cd build/<CR> :!rm -rf main<CR> :!cmake CMakeLists.txt<CR>:make<CR><CR> :cw<CR> :cd ..<CR>
 "nmap <leader>g :wa<CR>:cd build/<CR>:!rm -rf main<CR>:!cmake CMakeLists.txt<CR>:make<CR><CR>:cw<CR>:cd ..<CR>:!build/main<CR>
+
 "spell check, mod by z= 
 map <leader>sc :set spell!
 
@@ -145,8 +146,12 @@ map <leader>sh :set nosplitright<CR>:vsplit<CR>
 map <leader>sk :set nosplitbelow<CR>:split<CR>
 map <leader>sj :set splitbelow<CR>:split<CR>
 
-map <leader>sv <C-w>t<C-w>H
-map <leader>sh <C-w>t<C-w>K
+"map <leader>swv <C-w>t<C-w>H
+"map <leader>swh <C-w>t<C-w>K
+
+"terminal shell
+map <leader>` :set splitbelow<CR>:terminal<CR>
+tnoremap <ESC> <c-\><c-n>
 
 "open file
 "gf
@@ -156,6 +161,7 @@ call plug#begin('~/.vim/plugged')
 Plug 'connorholyday/vim-snazzy' "snazzy主题
 Plug 'altercation/vim-colors-solarized' "solarized主题
 Plug 'rafi/awesome-vim-colorschemes' "vim主题合集
+Plug 'octol/vim-cpp-enhanced-highlight' "cpp highlight
 Plug 'vim-airline/vim-airline' "状态栏
 Plug 'fholgado/minibufexpl.vim' "文件buf
 Plug 'vim-scripts/taglist.vim',{ 'on': 'TlistToggle' } "标签可视化
@@ -174,25 +180,33 @@ Plug 'skywind3000/gutentags_plus' "自动更新标签
 "Plug 'scrooloose/nerdcommenter' "快速开关注释
 "Plug 'SirVer/ultisnips' "模板补全
 "Plug 'honza/vim-snippets' "一些公用模板
-Plug 'Valloric/YouCompleteMe' "语法补全
+Plug 'Valloric/YouCompleteMe', {'do': './install.py --all'} "语法补全
 Plug 'rdnetto/YCM-Generator'	" .ycm_extra_conf.py与.color_coded生成插件
 Plug 'Chiel92/vim-autoformat' "代码格式化
 call plug#end()
 "filetype plugin indent on
 
-set background=dark
 "colorscheme snazzy
 "let g:SnazzyTransparent = 1 "透明背景
-"colorscheme gruvbox
-colorscheme solarized
+
+"colorscheme solarized
 "let g:solarized_termcolors=256
 
-"" airline
+"colorscheme gruvbox
+colorscheme solarized8
+
+"cpp highlight
+let g:cpp_class_scope_highlight = 1
+let g:cpp_member_variable_highlight = 1
+let g:cpp_class_decl_highlight = 1
+let g:cpp_posix_standard = 1
+"let g:cpp_experimental_simple_template_highlight = 1
+let g:cpp_experimental_template_highlight = 1
+let g:cpp_concepts_highlight = 1
+"let g:cpp_no_function_highlight = 1
+
+"状态栏 airline
 "let g:airline#extensions#tabline#enabled = 1
-"" next buf
-"nmap <leader>bn :bn<CR>
-"" previous buf
-"nmap <leader>bp :bp<CR>
 
 " 显示/隐藏 MiniBufExplorer 窗口
  nnoremap <F4> :MBEToggle<cr>
