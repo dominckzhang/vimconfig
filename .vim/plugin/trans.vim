@@ -18,107 +18,68 @@ function! s:selection() abort
   endtry
 endfunction
 
-if has("python3")
-function! s:DefPython()
-python3<<MY_PYTHONEOF
-import http.client
-import hashlib
-import urllib
-import random
-import json
-import textwrap
-
-#below id and key is mine, it up to 2000000 words
-MyAppid = '20200317000399860'
-SecretKey = 'vfxAjxRgMbzsgdtUKGNx'
-FromLang = 'auto'
-ToLang = 'zh'
-def trans(q):
-    q = q.replace('\n', ' ').replace('\r', '')
-    myurl = '/api/trans/vip/translate'
-    salt = random.randint(32768, 65536)
-    sign = MyAppid + q + str(salt) + SecretKey
-    sign = hashlib.md5(sign.encode()).hexdigest()
-    myurl = myurl + '?appid=' + MyAppid + '&q=' + urllib.parse.quote(q) + '&from=' + FromLang + '&to=' + ToLang + '&salt=' + str(
-        salt) + '&sign=' + sign
-
-    try:
-        httpClient = http.client.HTTPConnection('api.fanyi.baidu.com')
-        httpClient.request('GET', myurl)
-        response = httpClient.getresponse()
-        result_all = response.read().decode("utf-8")
-        result = json.loads(result_all)
-        print(textwrap.fill(result['trans_result'][0]['dst'], width=80))
-
-    except Exception as e:
-        print (e)
-    finally:
-        if httpClient:
-            httpClient.close()
-
-    return textwrap.fill(result['trans_result'][0]['dst'], width=80)
-
-MY_PYTHONEOF
-endfunction
-else
 function! s:DefPython()
 python<<MY_PYTHONEOF
-import httplib
-import md5
-import urllib
+import requests
 import random
 import json
+from hashlib import md5
 import textwrap
 
-#below id and key is mine, it up to 2000000 words
-MyAppid = '20200317000399860'
-SecretKey = 'vfxAjxRgMbzsgdtUKGNx'
-FromLang = 'auto'
-ToLang = 'zh'
-def trans(q):
-    q = q.replace('\n', ' ').replace('\r', '')
-    myurl = '/api/trans/vip/translate'
+myappid = '20200317000399860'
+secretkey = 'vfxAjxRgMbzsgdtUKGNx'
+#FromLang = 'auto'
+#ToLang = 'zh'
+#
+def trans(query, to_lang='zh', from_lang='auto'):
+    query = query.replace('\n', ' ').replace('\r', '')
     salt = random.randint(32768, 65536)
-    sign = MyAppid + q + str(salt) + SecretKey
-    m1 = md5.new()
-    m1.update(sign)
-    sign = m1.hexdigest()
-    myurl = myurl + '?appid=' + MyAppid + '&q=' + urllib.quote(q) + '&from=' + FromLang + '&to=' + ToLang + '&salt=' + str(
-        salt) + '&sign=' + sign
-
-    try:
-        httpClient = httplib.HTTPConnection('api.fanyi.baidu.com')
-        httpClient.request('GET', myurl)
-        response = httpClient.getresponse()
-        result_all = response.read().decode("utf-8")
-        result = json.loads(result_all)
-        print(textwrap.fill(result['trans_result'][0]['dst'], width=80))
-
-    except Exception as e:
-        print (e)
-    finally:
-        if httpClient:
-            httpClient.close()
-
+    #sign = make_md5(appid + query + str(salt) + appkey)
+    #sign = md5((appid + query + str(salt) + appkey).encode('utf-8')).hexdigest()
+    sign = md5(myappid + query + str(salt) + secretkey).hexdigest()
+    
+    # Build request
+    endpoint = 'http://api.fanyi.baidu.com'
+    path = '/api/trans/vip/translate'
+    url = endpoint + path
+    headers = {'Content-Type': 'application/x-www-form-urlencoded'}
+    payload = {'appid': myappid, 'q': query, 'from': from_lang, 'to': to_lang, 'salt': salt, 'sign': sign}
+    
+    # Send request
+    r = requests.post(url, params=payload, headers=headers)
+    result = r.json()
+    
+    # Show response
+    #print(json.dumps(result, indent=4, ensure_ascii=False))
+    
+    print(textwrap.fill(result['trans_result'][0]['dst'], width=80))
     return textwrap.fill(result['trans_result'][0]['dst'], width=80)
 
 MY_PYTHONEOF
 endfunction
-endif
 
 call s:DefPython()
 
 function! s:MyDoTrans()
     let words = substitute(s:selection(), '\n', '', 'g')
     echom words
-    if has("python3")
-        execute "python3 trans('" . words . "')"
-    else
-        execute "python trans('" . words . "')"
-    endif
+    execute "python trans('''". words. "''')"
 endfunction
 command -complete=custom,Dotrans Dotrans call s:MyDoTrans()
+
+function! s:MyDoTransToEn()
+    let words = substitute(s:selection(), '\n', '', 'g')
+    echom words
+    execute "python trans('''". words. "''', 'en', 'auto')"
+endfunction
+command -complete=custom,DotransToEn DotransToEn call s:MyDoTransToEn()
 
 let maplocalleader="`"
 vnoremap <unique> <LocalLeader>f <Esc><Esc>:Dotrans<CR>
 nnoremap <unique> <LocalLeader>w vaw<Esc><Esc>:Dotrans<CR>
+
+vnoremap <unique> <LocalLeader>fz <Esc><Esc>:Dotrans<CR>
+nnoremap <unique> <LocalLeader>wz vaw<Esc><Esc>:Dotrans<CR>
+
+vnoremap <unique> <LocalLeader>fe <Esc><Esc>:DotransToEn<CR>
+nnoremap <unique> <LocalLeader>we vaw<Esc><Esc>:DotransToEn<CR>
